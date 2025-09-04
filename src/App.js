@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { diffChars } from "diff";
 
+
 import logo from "./images/logo.png";
 import ChekMark from "./images/check.png";
 import Spelling from "./images/Spelling.png";
@@ -33,52 +34,52 @@ const spin = keyframes`
 const LoaderCard = styled.div`
   background: white;
   border-radius: 12px;
-  padding: 40px;
+  padding: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   text-align: center;
-  width: 350px;
+  width: 280px;
 `;
 
 const LoaderCircle = styled.div`
   border: 5px solid #f3f3f3;
   border-top: 5px solid #2563eb;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   animation: ${spin} 1.5s linear infinite;
-  margin: 0 auto 25px;
+  margin: 0 auto 15px;
 `;
 
 const LoaderText = styled.p`
-  margin: 10px 0;
-  font-size: 16px;
+  margin: 8px 0;
+  font-size: 14px;
   color: #555;
 `;
 
 const ConvertingText = styled(LoaderText)`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   color: #444;
 `;
 
 const Percentage = styled(LoaderText)`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   color: #2563eb;
-  margin-top: 15px;
+  margin-top: 10px;
 `;
 
 const ProgressBar = styled.div`
   width: 100%;
   background-color: #f3f3f3;
   border-radius: 10px;
-  margin: 20px 0;
+  margin: 15px 0;
   overflow: hidden;
 `;
 
 const Progress = styled.div`
   width: ${props => props.percentage}%;
-  height: 10px;
+  height: 8px;
   background-color: #2563eb;
   border-radius: 10px;
   transition: width 0.5s ease;
@@ -204,8 +205,7 @@ function App() {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    
-    
+    setBurgerOpen(false);
   };
 
   return (
@@ -220,7 +220,7 @@ function App() {
           </Logo>
           <LogoText>ENAGRAM</LogoText>
 </div>
-          {/* 👇 მხოლოდ მობილურზე გამოჩნდება */}
+         
           <BurgerButton onClick={() => setBurgerOpen(!burgerOpen)}>
             ☰
           </BurgerButton>
@@ -284,10 +284,12 @@ function App() {
           {activeTab === "text-comparison" && (
             <>
               <TextCard>
+               
                 <EditableText value={left} setValue={setLeft} htmlValue={leftHtml} />
               </TextCard>
 
               <TextCard>
+               
                 <EditableText value={right} setValue={setRight} htmlValue={rightHtml} />
               </TextCard>
             </>
@@ -326,14 +328,12 @@ const BurgerButton = styled.button`
   display: none;
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   color: #fff;
   cursor: pointer;
-  margin-left: auto;
 
   @media (max-width: 767px) {
-    display: flex;
-   overflow: hidden;
+    display: block;
   }
 `;
 
@@ -345,8 +345,6 @@ const Wrapper = styled.div`
 
   @media (max-width: 767px) {
     flex-direction: column;
-    overflow: hidden;
-  
   }
 `;
 const Sidebar = styled.aside`
@@ -361,69 +359,98 @@ const Sidebar = styled.aside`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 16px;
-    overflow: hidden;
+    padding: 0;
+    position: relative;
+    z-index: 100;
   }
 `;
-const LogoBox = styled.div`display: flex; align-items: center; gap: 8px; padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); 
-@media (max-width: 767px) {
+const LogoBox = styled.div`
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  padding: 16px; 
+  border-bottom: 1px solid rgba(255,255,255,0.1); 
+  
+  @media (max-width: 767px) {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    
+    padding: 0;
+    border-bottom: none;
   }
-
 `;
-const Logo = styled.div`border-radius: 6px; width: 42.65px; height: 44px; display: flex; align-items: center; justify-content: center; img{width:100%;height:100%;object-fit:contain;border-radius:6px;}`;
-const LogoText = styled.span`font-weight: bold; font-size: 18px;`;
+const Logo = styled.div`
+  border-radius: 6px; 
+  width: 36px; 
+  height: 36px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  
+  img {
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    border-radius:6px;
+  }
+`;
+const LogoText = styled.span`
+  font-weight: bold; 
+  font-size: 16px;
+  
+  @media (max-width: 320px) {
+    font-size: 14px;
+  }
+`;
 
 const Nav = styled.nav`
   flex: 1;
-  padding: 16px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  font-size: 14px;
+  gap: 6px;
+  font-size: 13px;
 
   @media (max-width: 767px) {
-    display: ${(props) => (props.mobileOpen ? "flex" : "none")};
+    display: ${props => props.mobileOpen ? 'flex' : 'none'};
     position: absolute;
-    top: 120px;   /* LogoBox-ის ქვემოთ */
-    right: 8px;
-   overflow: hidden;
+    top: 100%;
+   
+    right: 0;
     background: #0b2c59;
-    padding: 0;
-    z-index: 999;
+    z-index: 100;
+    padding: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   }
 `;
 const NavItem = styled.a`
-  padding: 8px 12px;
+  padding: 8px 10px;
   border-radius: 6px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 6px;
 
   img {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     object-fit: contain;
     transition: filter 0.3s ease;
   }
 
-  ${(props) =>
+  ${props =>
     props.active
       ? `
       background: #fff; 
       font-weight: 500; 
-      border-radius: 30px 0 0 30px;
-      padding: 8px 16px;
+      border-radius: 6px;
+      padding: 8px 12px;
       width:100%;
       color: #000 !important;
 
       img {
-        filter: brightness(0) saturate(100%); /* შავი ფერი */
+        filter: brightness(0) saturate(100%); 
       }
     `
       : `
@@ -434,63 +461,113 @@ const NavItem = styled.a`
       color: #fff;
 
       img {
-        filter: brightness(0) invert(1); /* თეთრი ფერი */
+        filter: brightness(0) invert(1); 
       }
     `}
 `;
 
-
-
-
-
 const Footer = styled.div`
-  padding: 16px;
+  padding: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 14px;
+  font-size: 12px;
   display: flex;
   font-family: Helvetica;
   align-items: center;
   justify-content: center;
   font-weight: 400;
-  gap: 8px;
+  gap: 6px;
 
   span:first-child {
     background-color: #9ec8ff;
     color: #132450;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     border: 2px solid white;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 10px;
   }
 
   span:last-child {
     margin-left: auto;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
   }
 
   @media (max-width: 767px) {
     display: none;
   }
 `;
-const Main = styled.div`flex:1; display:flex; flex-direction: column; background:#fff;`;
-const Topbar = styled.header`display:flex; justify-content:space-between; align-items:center; padding:16px 24px; background:#fff; border-bottom:1px solid #e5e7eb;`;
-const TopbarLeft = styled.div`display:flex; align-items:center; gap:12px;`;
-const Select = styled.select`border:1px solid #d1d5db; border-radius:6px; padding:4px 8px; font-size:14px;`;
-const CheckboxLabel = styled.label`display:flex; align-items:center; gap:6px; font-size:14px; cursor:pointer;`;
+const Main = styled.div`
+  flex:1; 
+  display:flex; 
+  flex-direction: column; 
+  background:#fff;
+  
+  @media (max-width: 767px) {
+    min-height: calc(100vh - 50px);
+  }
+`;
+const Topbar = styled.header`
+  display:flex; 
+  justify-content:space-between; 
+  align-items:center; 
+  padding:12px 16px; 
+  background:#fff; 
+  border-bottom:1px solid #e5e7eb;
+  flex-wrap: wrap;
+  gap: 8px;
+  
+  @media (max-width: 320px) {
+    padding: 10px 12px;
+  }
+`;
+const TopbarLeft = styled.div`
+  display:flex; 
+  align-items:center; 
+  gap:8px;
+  flex-wrap: wrap;
+  
+  @media (max-width: 320px) {
+    gap: 6px;
+  }
+`;
+const Select = styled.select`
+  border:1px solid #d1d5db; 
+  border-radius:6px; 
+  padding:4px 6px; 
+  font-size:13px;
+  
+  @media (max-width: 320px) {
+    font-size: 12px;
+    padding: 3px 5px;
+    max-width: 90px;
+  }
+`;
+const CheckboxLabel = styled.label`
+  display:flex; 
+  align-items:center; 
+  gap:4px; 
+  font-size:13px; 
+  cursor:pointer;
+  white-space: nowrap;
+  
+  @media (max-width: 320px) {
+    font-size: 12px;
+  }
+`;
 const SaveBtn = styled.button`
   background: ${props => props.disabled ? '#383A4899' : '#2563eb'};
   color: white;
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  font-size: 14px;
+  font-size: 13px;
   border: none;
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
   opacity: ${props => props.disabled ? 0.7 : 1};
@@ -498,56 +575,85 @@ const SaveBtn = styled.button`
   &:hover {
     background: ${props => props.disabled ? '#383A4899' : '#1e40af'};
   }
+  
+  @media (max-width: 320px) {
+    font-size: 12px;
+    padding: 5px 10px;
+    
+    img {
+      width: 12px;
+      height: 12px;
+    }
+  }
 `;
 
 const Content = styled.main`
   display: grid;
   grid-template-columns: 1fr;
   background: #fff;
-  gap: 24px;
-  padding: 16px;
+  gap: 16px;
+  padding: 12px;
   flex: 1;
 
   @media (min-width: 768px) {
     grid-template-columns: 1fr 1fr;
-    gap: 52px;
-    padding: 24px;
+    gap: 24px;
+    padding: 16px;
   }
 `;
 const TextCard = styled.div`
   border-radius: 8px;
-  padding: 16px;
+ 
   display: flex;
   flex-direction: column;
-  min-height: 200px;
+  min-height: 180px;
+ background: #F0F7FF;;
+ 
 
   @media (min-width: 768px) {
     min-height: 300px;
   }
 `;
+
 const EditableDiv = styled.div`
   flex: 1;
-  min-height: 200px;
+  min-height: 120px;
   border-radius: 6px;
-  padding: 12px;
+  padding: 10px;
   font-size: 14px;
   background: #F0F7FF;
-  border: 1px solid #F0F7FF;
+  border: 1px solid #d1e8ff;
   outline: none;
   white-space: pre-wrap;
   word-wrap: break-word;
   direction: ltr;
   text-align: left;
+  
   &:focus {
     border-color: #2563eb;
-    box-shadow: 0 0 0 2px #93c5fd;
+  
+  }
+  
+  @media (max-width: 320px) {
+    min-height: 100px;
+    padding: 8px;
+    font-size: 13px;
   }
 `;
-const Actions = styled.div`display:flex; justify-content:center; margin:24px 0; background:#fff;`;
+const Actions = styled.div`
+  display:flex; 
+  justify-content:center; 
+  margin:16px 0; 
+  background:#fff;
+  
+  @media (max-width: 320px) {
+    margin: 12px 0;
+  }
+`;
 const CompareBtn = styled.button`
   background: ${props => props.disabled ? '#383A4899' : '#2563eb'};
   color: white;
-  padding: 8px 24px;
+  padding: 8px 20px;
   border-radius: 6px;
   font-size: 14px;
   border: none;
@@ -560,6 +666,11 @@ const CompareBtn = styled.button`
   &:hover {
     background: ${props => props.disabled ? '#383A4899' : '#1e40af'};
   }
+  
+  @media (max-width: 320px) {
+    padding: 6px 16px;
+    font-size: 13px;
+  }
 `;
 
 const ComingSoon = styled.div`
@@ -568,24 +679,26 @@ const ComingSoon = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 300px;
+  min-height: 250px;
   text-align: center;
-  background: #f0f7ff; /* დამატებით ფონზე, რომ სურათები ჩანს */
+  background: #f0f7ff; 
   
   h2 {
     color: #2563eb;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
+    font-size: 18px;
+    
+    @media (max-width: 320px) {
+      font-size: 16px;
+    }
   }
   
   p {
     color: #6b7280;
-    font-size: 18px;
-  }
-
-  img {
-    width: 80px;
-    height: auto;
-    object-fit: contain;
-    margin-bottom: 16px;
+    font-size: 16px;
+    
+    @media (max-width: 320px) {
+      font-size: 14px;
+    }
   }
 `;
