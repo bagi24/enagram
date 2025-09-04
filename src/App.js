@@ -106,7 +106,7 @@ function EditableText({ value, setValue, htmlValue }) {
     const el = ref.current;
     if (!el) return;
 
-    // შენახული კურსორის პოზიციის აღდგენა
+    
     const selection = window.getSelection();
     const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
     const cursorPos = range ? range.endOffset : null;
@@ -140,6 +140,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [hasContent, setHasContent] = useState(false);
+  const [activeTab, setActiveTab] = useState("text-comparison");
 
   
   useEffect(() => {
@@ -200,6 +201,24 @@ function App() {
     setRightHtml("");
   };
 
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    
+    if (tab === "spell-check") {
+     
+      alert("მართლმწერის ფუნქციონალი მალე დაემატება");
+    } else if (tab === "speech-to-text") {
+   
+      alert("ხმიდან ტექსტში კონვერტაციის ფუნქციონალი მალე დაემატება");
+    } else if (tab === "text-to-speech") {
+     
+      alert("ტექსტიდან ხმაში კონვერტაციის ფუნქციონალი მალე დაემატება");
+    } else if (tab === "pdf-conversion") {
+     
+      alert("PDF კონვერტაციის ფუნქციონალი მალე დაემატება");
+    }
+  };
+
   return (
     <Wrapper>
       {isLoading && <Loader percentage={progress} />}
@@ -212,13 +231,38 @@ function App() {
           <LogoText>ENAGRAM</LogoText>
         </LogoBox>
         <Nav>
-          <NavItem><img src={ChekMark} alt="ChekMark" /> მართლმწერი</NavItem>
-          <NavItem active><img src={Spelling} alt="Spelling" /> ტექსტის შედარება</NavItem>
-          <NavItem><img src={Mic} alt="Mic" />ხმიდან <img src={Arrow} alt="Arrow" /> ტექსტი</NavItem>
-          <NavItem><img src={Aling} alt="Aling" />ტექსტიდან <img src={Arrow} alt="Arrow" /> ხმა</NavItem>
-          <NavItem><img src={PDF} alt="PDF" />PDF კონვერტაცია</NavItem>
+          <NavItem 
+            active={activeTab === "spell-check"} 
+            onClick={() => handleTabChange("spell-check")}
+          >
+            <img src={ChekMark} alt="ChekMark" /> მართლმწერი
+          </NavItem>
+          <NavItem 
+            active={activeTab === "text-comparison"} 
+            onClick={() => handleTabChange("text-comparison")}
+          >
+            <img src={Spelling} alt="Spelling" /> ტექსტის შედარება
+          </NavItem>
+          <NavItem 
+            active={activeTab === "speech-to-text"} 
+            onClick={() => handleTabChange("speech-to-text")}
+          >
+            <img src={Mic} alt="Mic" />ხმიდან <img src={Arrow} alt="Arrow" /> ტექსტი
+          </NavItem>
+          <NavItem 
+            active={activeTab === "text-to-speech"} 
+            onClick={() => handleTabChange("text-to-speech")}
+          >
+            <img src={Aling} alt="Aling" />ტექსტიდან <img src={Arrow} alt="Arrow" /> ხმა
+          </NavItem>
+          <NavItem 
+            active={activeTab === "pdf-conversion"} 
+            onClick={() => handleTabChange("pdf-conversion")}
+          >
+            <img src={PDF} alt="PDF" />PDF კონვერტაცია
+          </NavItem>
         </Nav>
-        <Footer>თამარ ონიანი ...</Footer>
+        <Footer> <span>თ</span> <span>თამარ ონიანი</span> <span>...</span></Footer>
       </Sidebar>
 
       <Main>
@@ -226,7 +270,8 @@ function App() {
           <TopbarLeft>
             <Select>
               <option>ქართული</option>
-              <option>English</option>
+              <option>ქართული</option>
+               <option>ინგლისური</option>
             </Select>
             <CheckboxLabel>
               <input type="checkbox" /> ფორმატის შენარჩუნება
@@ -241,23 +286,39 @@ function App() {
         </Topbar>
 
         <Content>
-          <TextCard>
-            <EditableText value={left} setValue={setLeft} htmlValue={leftHtml} />
-          </TextCard>
+          {activeTab === "text-comparison" && (
+            <>
+              <TextCard>
+                <EditableText value={left} setValue={setLeft} htmlValue={leftHtml} />
+              </TextCard>
 
-          <TextCard>
-            <EditableText value={right} setValue={setRight} htmlValue={rightHtml} />
-          </TextCard>
+              <TextCard>
+                <EditableText value={right} setValue={setRight} htmlValue={rightHtml} />
+              </TextCard>
+            </>
+          )}
+          
+          {activeTab !== "text-comparison" && (
+            <ComingSoon>
+              <h2>{activeTab === "spell-check" && "მართლმწერის ფუნქციონალი"}
+                   {activeTab === "speech-to-text" && "ხმიდან ტექსტში კონვერტაცია"}
+                   {activeTab === "text-to-speech" && "ტექსტიდან ხმაში კონვერტაცია"}
+                   {activeTab === "pdf-conversion" && "PDF კონვერტაცია"}</h2>
+              <p>ეს ფუნქციონალი მალე დაემატება</p>
+            </ComingSoon>
+          )}
         </Content>
 
-        <Actions>
-          <CompareBtn 
-            onClick={handleCompare} 
-            disabled={!hasContent}
-          >
-            ↻ შედარება
-          </CompareBtn>
-        </Actions>
+        {activeTab === "text-comparison" && (
+          <Actions>
+            <CompareBtn 
+              onClick={handleCompare} 
+              disabled={!hasContent}
+            >
+              ↻ შედარება
+            </CompareBtn>
+          </Actions>
+        )}
       </Main>
     </Wrapper>
   );
@@ -272,8 +333,77 @@ const LogoBox = styled.div`display: flex; align-items: center; gap: 8px; padding
 const Logo = styled.div`border-radius: 6px; width: 42.65px; height: 44px; display: flex; align-items: center; justify-content: center; img{width:100%;height:100%;object-fit:contain;border-radius:6px;}`;
 const LogoText = styled.span`font-weight: bold; font-size: 18px;`;
 const Nav = styled.nav`flex:1; padding:16px; display:flex; flex-direction: column; gap:8px; font-size:14px;`;
-const NavItem = styled.a`padding:8px 12px; border-radius:6px; cursor:pointer; display:flex; align-items:center; gap:9px; ${(props)=>props.active?`background: rgba(255,255,255,0.1); font-weight:500;`:`&:hover { background: rgba(255,255,255,0.1); }`}`;
-const Footer = styled.div`padding:16px; border-top:1px solid rgba(255,255,255,0.1); font-size:14px;`;
+const NavItem = styled.a`
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  
+
+  ${(props) => props.active
+    ? `
+      background: #fff; 
+      font-weight: 500; 
+     border-radius: 30px 0 0 30px;
+      padding: 8px 16px;
+
+      
+      width:100%;
+      color: #000 !important; /* შავი ფერი აქტივისთვის */
+    `
+    : `
+      &:hover { 
+        background: rgba(255,255,255,0.1); 
+        color: #fff; /* სურვილის მიხედვით ღია ფერი ჰოვერზე */
+      }
+      color: #fff; /* ნორმალურ მდგომარეობაში ტექსტის ფერი */
+
+
+
+      
+      img {
+    color: #0000 !important;
+      }
+    `
+
+    
+  }
+`;
+
+
+
+const Footer = styled.div`
+  padding: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 14px;
+  display: flex;
+  font-family: Helvetica;
+    align-items: center;
+    justify-content: center;
+     font-weight: 400;
+  gap: 8px;
+  
+  span:first-child {
+    background-color: #9EC8FF;
+    color: #132450;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+  }
+  
+  span:last-child {
+    margin-left: auto;
+    cursor: pointer;
+     font-size: 14px;
+  }
+`;
 const Main = styled.div`flex:1; display:flex; flex-direction: column; background:#fff;`;
 const Topbar = styled.header`display:flex; justify-content:space-between; align-items:center; padding:16px 24px; background:#fff; border-bottom:1px solid #e5e7eb;`;
 const TopbarLeft = styled.div`display:flex; align-items:center; gap:12px;`;
@@ -333,5 +463,33 @@ const CompareBtn = styled.button`
   
   &:hover {
     background: ${props => props.disabled ? '#383A4899' : '#1e40af'};
+  }
+`;
+
+const ComingSoon = styled.div`
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  text-align: center;
+  background: #f0f7ff; /* დამატებით ფონზე, რომ სურათები ჩანს */
+  
+  h2 {
+    color: #2563eb;
+    margin-bottom: 16px;
+  }
+  
+  p {
+    color: #6b7280;
+    font-size: 18px;
+  }
+
+  img {
+    width: 80px;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 16px;
   }
 `;
